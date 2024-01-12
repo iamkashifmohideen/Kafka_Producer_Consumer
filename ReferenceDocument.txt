@@ -1,0 +1,46 @@
+https://javatute.com/kafka/spring-boot-kafka-producer-and-consumer-example-step-by-step-guide/
+
+command prompt 1
+D:\kafka>.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+
+
+Command prompt 2
+D:\kafka>.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+command Prompt 3
+D:\kafka>.\bin\windows\kafka-topics.bat -create -zookeeper localhost:2181 -replication-factor 1 -partitions 1 -topic javatute-topic-1
+Created topic javatute-topic-1.
+
+D:\kafka>.\bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
+javatute-topic-1
+
+D:\kafka>.\bin\windows\kafka-topics.bat -create -zookeeper localhost:2181 -replication-factor 1 -partitions 1 -topic Test
+Created topic Test.
+
+D:\kafka>.\bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
+Test
+javatute-topic-1
+
+D:\kafka>.\bin\windows\kafka-topics.bat -create -zookeeper localhost:2181 -replication-factor 1 -partitions 1 -topic Save
+Created topic Save.
+
+D:\kafka>.\bin\windows\kafka-topics.bat -create -zookeeper localhost:2181 -replication-factor 1 -partitions 1 -topic FindAll
+Created topic FindAll.
+
+D:\kafka>.\bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
+FindAll
+Save
+Test
+__consumer_offsets
+javatute-topic-1
+
+Do code for producer and consumer start the tomcat server
+In postman
+Get   http://localhost:8080/publish/all/sample
+
+POST  http://localhost:8080/saveData/
+body/raw/json
+{
+    "firstName":"user1",
+    "lastName":"user2"
+}
