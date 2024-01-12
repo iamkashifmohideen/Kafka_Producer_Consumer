@@ -25,37 +25,78 @@ public class WorkflowPublishers {
 	private final static String TOPICNAME = "Test";
 
 	
+// 	@PostMapping("/getData")
+// 	public String getData(@RequestBody JsonNode obj) {
+// 		if (obj != null) {
+// 			try {
+// 				String idValue = getId(obj);
+// 				if (idValue != null && !idValue.isEmpty()) {
+
+// 					Workflow workflow = workflowApi.getWorkflowById(idValue);
+// 					if (workflow == null) {
+// 						template.send(TOPICNAME, idValue);
+// 						return "Data Published";
+// 					} else {
+// 						return "Data in DB ->" + idValue;
+// 					}
+
+// 				} else {
+// 					return "No ID";
+// 				}
+	
+// 			} catch (Exception e) {
+// 				return e.getMessage();
+// 			}
+// 		} else {
+// 			return "Null Data";
+// 		}
+// 	}
+
+// private String getId(JsonNode jsonString) {
+// 		JsonNode nameValue = jsonString.get("name");
+// 		return nameValue.asText();
+// 	}
+
 	@PostMapping("/getData")
 	public String getData(@RequestBody JsonNode obj) {
 		if (obj != null) {
 			try {
-				String idValue = getId(obj);
-				if (idValue != null && !idValue.isEmpty()) {
+				JsonNode usageData = obj.get("usage");
+				for (JsonNode usageJsonValue : usageData) {
 
-					Workflow workflow = workflowApi.getWorkflowById(idValue);
-					if (workflow == null) {
-						template.send(TOPICNAME, idValue);
-						return "Data Published";
+					String idValue = getId(usageJsonValue);
+					if (idValue != null && !idValue.isEmpty()) {
+
+						Workflow workflow = workflowApi.getWorkflowById(idValue);
+						if (workflow == null) {
+							template.send(TOPICNAME, idValue);
+							return "Data Published";
+						} else {
+							return "Data in DB ->" + idValue;
+						}
+
 					} else {
-						return "Data in DB ->" + idValue;
+						return "No ID";
 					}
-
-				} else {
-					return "No ID";
 				}
-	
 			} catch (Exception e) {
 				return e.getMessage();
 			}
 		} else {
 			return "Null Data";
 		}
+		return null;
 	}
 
-private String getId(JsonNode jsonString) {
-		JsonNode nameValue = jsonString.get("name");
-		return nameValue.asText();
+	private String getId(JsonNode usageJsonValue) {
+
+		JsonNode usageID = usageJsonValue.get("id");
+		JsonNode usageService = usageJsonValue.get("service");
+		JsonNode usageServiceId = usageService.get("id");
+		JsonNode usageServicePlan = usageService.get("plan");
+		return usageID + "#" + usageServiceId + "#" + usageServicePlan;
 	}
+
 
 	@PostMapping("/create")
 	public String createRecord(@RequestBody Workflow obj) {
